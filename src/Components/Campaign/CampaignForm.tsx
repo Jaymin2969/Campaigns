@@ -1,8 +1,8 @@
-import React, {useState, useEffect, ChangeEvent} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {addCampaign, updateCampaign} from '../../redux/campaignsSlice';
-import {CampaignType, Schedule, Campaign} from '../../types';
-import {RootState} from '../../redux/store';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCampaign, updateCampaign } from '../../redux/campaignsSlice';
+import { CampaignType, Schedule, Campaign } from '../../types';
+import { RootState } from '../../redux/store';
 import {
     Button,
     TextField,
@@ -16,16 +16,17 @@ import {
 import styles from './style.module.css';
 
 interface CampaignFormProps {
-    campaignId?: string;
-    onClose: () => void;
+    campaignId?: string; // Optional campaign ID for editing existing campaigns
+    onClose: () => void; // Function to close the form
 }
 
-const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
+const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
     const dispatch = useDispatch();
     const campaignToEdit = useSelector((state: RootState) =>
         state.campaigns.campaigns.find(c => c.id === campaignId)
     );
 
+    // State variables for form fields and errors
     const [type, setType] = useState<CampaignType>('Cost per Order');
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
@@ -34,11 +35,13 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
     const [startTime, setStartTime] = useState<string>('');
     const [endTime, setEndTime] = useState<string>('');
 
+    // State variables for validation error messages
     const [typeError, setTypeError] = useState<string>('');
     const [startDateError, setStartDateError] = useState<string>('');
     const [endDateError, setEndDateError] = useState<string>('');
     const [scheduleError, setScheduleError] = useState<string>('');
 
+    // Load data from redux store when editing an existing campaign
     useEffect(() => {
         if (campaignToEdit) {
             setType(campaignToEdit.type);
@@ -48,6 +51,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
         }
     }, [campaignToEdit]);
 
+    // Reset form fields and error messages
     const resetForm = () => {
         setType('Cost per Order');
         setStartDate('');
@@ -63,15 +67,17 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
         setScheduleError('');
     };
 
+    // Add schedule to the list
     const handleAddSchedule = () => {
         if (weekday && startTime && endTime) {
-            setSchedules([...schedules, {weekdays: [weekday], startTime, endTime}]);
+            setSchedules([...schedules, { weekdays: [weekday], startTime, endTime }]);
             setWeekday('');
             setStartTime('');
             setEndTime('');
         }
     };
 
+    // Validate form fields before saving
     const validateForm = () => {
         let isValid = true;
 
@@ -109,7 +115,8 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
         return isValid;
     };
 
-    const handleSaveCampaign = (e: any) => {
+    // Save campaign data
+    const handleSaveCampaign = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -134,6 +141,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
         onClose();
     };
 
+    // Cancel editing or adding campaign
     const handleCancel = () => {
         resetForm();
         onClose();
@@ -143,15 +151,16 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
         <div className={styles.root}>
             <h1>{campaignId ? 'Edit Campaign' : 'Create Campaign'}</h1>
             <form onSubmit={handleSaveCampaign} className={styles.form}>
+                {/* Campaign Type Selector */}
                 <div className={styles.campaignTypeWrapper}>
                     <FormControl error={Boolean(typeError)}>
-                        <InputLabel id="select-the-day-lable">select the day</InputLabel>
-
-                        <Select value={type}
-                                label="select the type"
-                                labelId="select-the-type-lable"
-
-                                onChange={(e: SelectChangeEvent<string>) => setType(e.target.value as CampaignType)}>
+                        <InputLabel id="select-the-type-label">Campaign Type</InputLabel>
+                        <Select
+                            value={type}
+                            onChange={(e: SelectChangeEvent<string>) => setType(e.target.value as CampaignType)}
+                            label="Campaign Type"
+                            labelId="select-the-type-label"
+                        >
                             <MenuItem value="Cost per Order">Cost per Order</MenuItem>
                             <MenuItem value="Cost per Click">Cost per Click</MenuItem>
                             <MenuItem value="Buy One Get One">Buy One Get One</MenuItem>
@@ -159,49 +168,47 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
                         {typeError && <FormHelperText>{typeError}</FormHelperText>}
                     </FormControl>
                 </div>
+
+                {/* Date Picker */}
                 <div className={styles.dateWrapper}>
                     <FormControl error={Boolean(startDateError)}>
-                        <div>
-                            <TextField
-                                label="Start Date"
-                                type="date"
-                                value={startDate}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            {startDateError && <FormHelperText>{startDateError}</FormHelperText>}
-                        </div>
+                        <TextField
+                            label="Start Date"
+                            type="date"
+                            value={startDate}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStartDate(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        {startDateError && <FormHelperText>{startDateError}</FormHelperText>}
                     </FormControl>
                     <FormControl error={Boolean(endDateError)}>
-                        <div>
-                            <TextField
-                                label="End Date"
-                                type="date"
-                                value={endDate}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            {endDateError && <FormHelperText>{endDateError}</FormHelperText>}
-                        </div>
+                        <TextField
+                            label="End Date"
+                            type="date"
+                            value={endDate}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEndDate(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        {endDateError && <FormHelperText>{endDateError}</FormHelperText>}
                     </FormControl>
                 </div>
 
+                {/* Schedule Selector and Time Pickers */}
                 <div className={styles.scheduleTimeContainer}>
                     <h3>Schedule</h3>
                     <div className={styles.scheduleTimeWrapper}>
                         <div className={styles.scheduleTime}>
                             <FormControl>
-                                <InputLabel id="select-the-day-lable">select the day</InputLabel>
-
-                                <Select value={weekday} label="select the day"
-                                        labelId="select-the-day-lable"
-                                        defaultValue='Monday'
-
-                                        onChange={(e: SelectChangeEvent<string>) => setWeekday(e.target.value)}
+                                <InputLabel id="select-the-day-label">Select the Day</InputLabel>
+                                <Select
+                                    value={weekday}
+                                    onChange={(e: SelectChangeEvent<string>) => setWeekday(e.target.value)}
+                                    label="Select the Day"
+                                    labelId="select-the-day-label"
                                 >
                                     <MenuItem value="Monday">Monday</MenuItem>
                                     <MenuItem value="Tuesday">Tuesday</MenuItem>
@@ -252,9 +259,15 @@ const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
                     ))}
                     {scheduleError && <div className={styles.error}>{scheduleError}</div>}
                 </div>
-                <Button type="submit" variant="contained">{campaignId ? 'Update Campaign' : 'Add Campaign'}</Button>
+
+                {/* Submit and Cancel Buttons */}
+                <Button type="submit" variant="contained">
+                    {campaignId ? 'Update Campaign' : 'Add Campaign'}
+                </Button>
+                <Button onClick={handleCancel} variant="outlined">
+                    Cancel
+                </Button>
             </form>
-            <Button onClick={handleCancel} variant="outlined">Cancel</Button>
         </div>
     );
 };
