@@ -1,0 +1,71 @@
+.root{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+}
+.campaignTypeWrapper{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.campaignTypeWrapper div{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+}
+ 
+.dateWrapper{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 24px;
+}
+.scheduleTimeContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+}
+.scheduleTimeWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+}
+.contentWrapper{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 450px;
+    gap: 10px;
+gap: 24px;
+    padding: 24px   ;
+}
+.scheduleTime{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
