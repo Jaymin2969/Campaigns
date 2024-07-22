@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addCampaign, updateCampaign } from '../../redux/campaignsSlice';
-import { CampaignType, Schedule, Campaign } from '../../types';
-import { RootState } from '../../redux/store';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {addCampaign, updateCampaign} from '../../redux/campaignsSlice';
+import {CampaignType, Schedule, Campaign} from '../../types';
+import {RootState} from '../../redux/store';
 import {
     Button,
     TextField,
@@ -20,7 +20,7 @@ interface CampaignFormProps {
     onClose: () => void; // Function to close the form
 }
 
-const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
+const CampaignForm: React.FC<CampaignFormProps> = ({campaignId, onClose}) => {
     const dispatch = useDispatch();
     const campaignToEdit = useSelector((state: RootState) =>
         state.campaigns.campaigns.find(c => c.id === campaignId)
@@ -70,10 +70,16 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
     // Add schedule to the list
     const handleAddSchedule = () => {
         if (weekday && startTime && endTime) {
-            setSchedules([...schedules, { weekdays: [weekday], startTime, endTime }]);
-            setWeekday('');
+            if (startTime >= endTime) {
+                setScheduleError('Start time must be before end time');
+                return;
+            }
+
+            setSchedules([...schedules, {weekdays: [weekday], startTime, endTime}]);
+            setWeekday('Monday');
             setStartTime('');
             setEndTime('');
+            setScheduleError('');
         }
     };
 
@@ -88,8 +94,12 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
             setTypeError('');
         }
 
+        const currentDate = new Date().toISOString().split('T')[0];
         if (!startDate) {
             setStartDateError('Start date is required');
+            isValid = false;
+        } else if (startDate < currentDate) {
+            setStartDateError('Start date cannot be earlier than today');
             isValid = false;
         } else {
             setStartDateError('');
@@ -157,7 +167,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
                         <InputLabel id="select-the-type-label">Campaign Type</InputLabel>
                         <Select
                             value={type}
-                            onChange={(e: SelectChangeEvent<string>) => setType(e.target.value as CampaignType)}
+                            onChange={(e: SelectChangeEvent) => setType(e.target.value as CampaignType)}
                             label="Campaign Type"
                             labelId="select-the-type-label"
                         >
@@ -206,7 +216,7 @@ const CampaignForm: React.FC<CampaignFormProps> = ({ campaignId, onClose }) => {
                                 <InputLabel id="select-the-day-label">Select the Day</InputLabel>
                                 <Select
                                     value={weekday}
-                                    onChange={(e: SelectChangeEvent<string>) => setWeekday(e.target.value)}
+                                    onChange={(e: SelectChangeEvent) => setWeekday(e.target.value)}
                                     label="Select the Day"
                                     labelId="select-the-day-label"
                                 >

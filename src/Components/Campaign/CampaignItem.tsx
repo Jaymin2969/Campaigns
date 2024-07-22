@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Campaign} from '../../types';
-import {getNextActivation} from '../../utils';
+import {getCampaignActivation} from '../../utils';
 import {
     Card,
     CardContent,
@@ -14,7 +14,7 @@ import {
     DialogActions,
     Snackbar
 } from '@mui/material';
-import {useSpring, animated, config} from 'react-spring';
+import {useSpring, animated} from 'react-spring';
 import {useDispatch} from 'react-redux';
 import {deleteCampaign} from '../../redux/campaignsSlice';
 
@@ -27,7 +27,7 @@ interface CampaignItemProps {
 // Functional component CampaignItem
 const CampaignItem: React.FC<CampaignItemProps> = ({campaign, handleEditCampaign}) => {
     // Calculate the next activation time using the getNextActivation utility function
-    const nextActivation = getNextActivation(campaign.schedule);
+    const campaignActivation = getCampaignActivation(campaign.schedule, campaign);
 
     // Animation configuration
     const [isHovered, setIsHovered] = useState(false);
@@ -106,7 +106,7 @@ const CampaignItem: React.FC<CampaignItemProps> = ({campaign, handleEditCampaign
                         </Box>
                         <Box mb={1}>
                             <Typography variant="body2" component="p">
-                                Next Activation: {nextActivation}
+                                {campaignActivation}
                             </Typography>
                         </Box>
                     </CardContent>

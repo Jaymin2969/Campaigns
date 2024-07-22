@@ -1,4 +1,4 @@
-.root{
+.root {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -7,14 +7,15 @@
     gap: 24px;
 }
 
-.form{
+.form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 24px;
 }
-.campaignTypeWrapper{
+
+.campaignTypeWrapper {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -22,35 +23,38 @@
     gap: 12px;
 }
 
-.campaignTypeWrapper div{
+.campaignTypeWrapper div {
     width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 12px;
 }
- 
-.dateWrapper{
+
+.dateWrapper {
     display: flex;
     justify-content: center;
     align-content: center;
     gap: 24px;
 }
-.scheduleTimeContainer{
+
+.scheduleTimeContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 12px;
 }
-.scheduleTimeWrapper{
+
+.scheduleTimeWrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 12px;
 }
-.contentWrapper{
+
+.contentWrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -59,11 +63,11 @@
     overflow-x: hidden;
     overflow-y: auto;
     max-height: 450px;
-    gap: 10px;
-gap: 24px;
-    padding: 24px   ;
+    gap: 24px;
+    padding: 24px;
 }
-.scheduleTime{
+
+.scheduleTime {
     display: flex;
     justify-content: center;
     align-items: center;
